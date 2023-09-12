@@ -20,6 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/room", require("../routes/api/room"));
+app.use("/service", require("../routes/api/service"));
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");

@@ -54,8 +54,66 @@ const getServicesInRoom = async (req, res) => {
     const room = await Room.findById(req.params.roomId)
       .populate("services.serviceId")
       .exec();
-    const services = room.services.map((serviceData) => serviceData.serviceId);
-    res.json(services);
+    res.json(room.services);
+  } catch (err) {
+    res.status(500).json({ message: "Server error. Please try again." });
+    console.log(err);
+  }
+};
+
+const addServicesInRoom = async (req, res) => {
+  const exist = await Service.findById(req.body.serviceId);
+  if (exist) {
+    try {
+      const room = await Room.findById(req.params.roomId)
+        .populate("services.serviceId")
+        .exec();
+      room.services.push(req.body);
+      await room.save();
+      res.json(room);
+    } catch (err) {
+      res.status(500).json({ message: "Server error. Please try again." });
+      console.log(err);
+    }
+  } else {
+    res.status(404).json({ message: "Service does not exist" });
+  }
+};
+
+const deleteServicesInRoom = async (req, res) => {
+  const exist = await Service.findById(req.body.serviceId);
+  if (exist) {
+    try {
+      const room = await Room.findById(req.params.roomId)
+        .populate("services.serviceId")
+        .exec();
+      room.services = room.services.filter(
+        (service) => service.serviceId._id.toString() != req.body.serviceId
+      );
+      await room.save();
+      res.json(room);
+    } catch (err) {
+      res.status(500).json({ message: "Server error. Please try again." });
+      console.log(err);
+    }
+  } else {
+    res.status(404).json({ message: "Service does not exist" });
+  }
+};
+
+const updateServicesInRoom = async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.roomId)
+      .populate("services.serviceId")
+      .exec();
+    room.services.forEach((service) => {
+      const update = req.body.services.find(
+        (s) => s.serviceId == service.serviceId._id.toString()
+      );
+      if (update.quantity) service.quantity = update.quantity;
+    });
+    await room.save();
+    res.json(room);
   } catch (err) {
     res.status(500).json({ message: "Server error. Please try again." });
     console.log(err);
@@ -69,4 +127,7 @@ module.exports = {
   updateRoom,
   deleteRoom,
   getServicesInRoom,
+  addServicesInRoom,
+  deleteServicesInRoom,
+  updateServicesInRoom,
 };

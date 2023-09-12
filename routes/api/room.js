@@ -13,5 +13,10 @@ router
   .put(roomController.updateRoom)
   .delete(roomController.deleteRoom);
 
-router.route("/service/:roomId").get(roomController.getServicesInRoom);
+router
+  .route("/service/:roomId")
+  .get(roomController.getServicesInRoom)
+  .post(roomController.addServicesInRoom)
+  .put(roomController.updateServicesInRoom)
+  .delete(roomController.deleteServicesInRoom);
 module.exports = router;
