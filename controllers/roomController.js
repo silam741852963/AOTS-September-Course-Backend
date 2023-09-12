@@ -1,4 +1,5 @@
 const Room = require("../models/Room");
+const Service = require("../models/Service");
 
 const getAllRooms = async (req, res) => {
   const rooms = await Room.find();
@@ -7,8 +8,8 @@ const getAllRooms = async (req, res) => {
 };
 
 const getRoomById = async (req, res) => {
-  const result = await Room.findById(req.params.id);
   try {
+    const result = await Room.findById(req.params.id);
     res.json(result);
   } catch (err) {
     res.status(500).json({ message: "Server error. Please try again." });
@@ -17,8 +18,8 @@ const getRoomById = async (req, res) => {
 };
 
 const createRoom = async (req, res) => {
-  const result = await Room.create(req.body);
   try {
+    const result = await Room.create(req.body);
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ message: "Server error. Please try again." });
@@ -27,10 +28,10 @@ const createRoom = async (req, res) => {
 };
 
 const updateRoom = async (req, res) => {
-  const result = await Room.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
   try {
+    const result = await Room.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     res.json(result);
   } catch (err) {
     res.status(500).json({ message: "Server error. Please try again." });
@@ -39,9 +40,22 @@ const updateRoom = async (req, res) => {
 };
 
 const deleteRoom = async (req, res) => {
-  const result = await Room.findByIdAndDelete(req.params.id);
   try {
+    const result = await Room.findByIdAndDelete(req.params.id);
     res.status(204).json(result);
+  } catch (err) {
+    res.status(500).json({ message: "Server error. Please try again." });
+    console.log(err);
+  }
+};
+
+const getServicesInRoom = async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.roomId)
+      .populate("services.serviceId")
+      .exec();
+    const services = room.services.map((serviceData) => serviceData.serviceId);
+    res.json(services);
   } catch (err) {
     res.status(500).json({ message: "Server error. Please try again." });
     console.log(err);
@@ -54,4 +68,5 @@ module.exports = {
   createRoom,
   updateRoom,
   deleteRoom,
+  getServicesInRoom,
 };
