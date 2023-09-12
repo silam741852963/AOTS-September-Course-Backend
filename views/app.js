@@ -21,6 +21,7 @@ app.use(cookieParser());
 
 app.use("/room", require("../routes/api/room"));
 app.use("/service", require("../routes/api/service"));
+app.use("/renter", require("../routes/api/renter"));
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
