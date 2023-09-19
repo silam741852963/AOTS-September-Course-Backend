@@ -18,7 +18,7 @@ This serves as the backend infrastructure for a course project centered around a
 ### config folder
 + allowedOrigins: Modify this file to authorize access to your backend, especially when utilizing the frontend to send API requests.
 + corsOption: I aim to ensure a seamless connection between this backend and the frontend without encountering any errors.
-+ dbConn: Following standard practice, I refrain from pushing the .env file to the repository. Please create it and include the DATABASE_URL variable. Obtain the URL by navigating to MongoDB -> Database -> Overview -> Connect -> Drivers -> 3. Copy and paste your connection string into your application code.
++ dbConn: Establish a connection to the database. I've included the database URL in the .env file, which will be shared with the team for the project.
 ### git
 1. Create a new branch with your name as the name.
 2. Make your contributions on this branch.
