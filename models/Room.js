@@ -6,22 +6,25 @@ const roomsSchema = new Schema({
   group: String,
   type: String,
   price: Number,
-  deposit: Number,
-  debt: Number,
-  renter: Number,
-  day_of_hire: Date,
-  expiration_data: Date,
-  status: String,
+  deposit: { type: Number, default: 0 },
+  debt: { type: Number, default: 0 },
+  renter: { type: Number, default: 0 },
+  day_of_hire: { type: Date, default: Date.now },
+  expiration_date: {
+    type: Date,
+    default: Date.now,
+  },
+  status: { type: String, default: "idle" },
   services: [
     {
       serviceId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Service",
       },
-      quantity: Number,
+      quantity: { type: Number, default: 1 },
     },
   ],
-  sort: Number,
+  sort: { type: Number, default: 0 },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
 });
